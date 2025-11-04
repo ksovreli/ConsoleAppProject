@@ -2,7 +2,7 @@
 {
     internal class Hangman
     {
-        private readonly List<string> Words = new List<string>
+        private readonly List<string> _Words = new List<string>
             {
                 "apple",
                 "banana",
@@ -11,28 +11,28 @@
                 "elderberry"
             };
 
-        private readonly int Index;
-        private readonly string RandomWord;
-        private readonly char[] GuessedWord;
-        private readonly List<char> TriedLetters;
+        private readonly int _Index;
+        private readonly string _RandomWord;
+        private readonly char[] _GuessedWord;
+        private readonly List<char> _TriedLetters;
 
         public uint Lives { get; private set; }
 
         public Hangman()
         {
             Random random = new Random();
-            Index = random.Next(0, Words.Count);
-            RandomWord = Words[Index];
-            GuessedWord = new string('_', RandomWord.Length).ToCharArray();
-            Lives = (uint)Math.Ceiling(RandomWord.Length / 2.0) + 3;
-            TriedLetters = new List<char>();
+            _Index = random.Next(0, _Words.Count);
+            _RandomWord = _Words[_Index];
+            _GuessedWord = new string('_', _RandomWord.Length).ToCharArray();
+            Lives = (uint)Math.Ceiling(_RandomWord.Length / 2.0) + 3;
+            _TriedLetters = new List<char>();
         }
 
         public void Start()
         {
             while (true)
             {
-                Console.WriteLine("Word: " + string.Join(" ", GuessedWord));
+                Console.WriteLine("Word: " + string.Join(" ", _GuessedWord));
                 Console.WriteLine($"Lives remaining: {Lives}");
 
                 Console.Write("\nGuess a letter: ");
@@ -44,22 +44,22 @@
                     continue;
                 }
 
-                if (TriedLetters.Contains(userGuess))
+                if (_TriedLetters.Contains(userGuess))
                 {
                     Console.WriteLine($"You have already tried '{userGuess}', try different one");
                     continue;
                 }
-                TriedLetters.Add(userGuess);
+                _TriedLetters.Add(userGuess);
 
                 bool correctGuess = false;
 
-                if (RandomWord.Contains(userGuess, StringComparison.OrdinalIgnoreCase))
+                if (_RandomWord.Contains(userGuess, StringComparison.OrdinalIgnoreCase))
                 {
-                    for (int i = 0; i < RandomWord.Length; i++)
+                    for (int i = 0; i < _RandomWord.Length; i++)
                     {
-                        if (char.ToLower(userGuess) == char.ToLower(RandomWord[i]))
+                        if (char.ToLower(userGuess) == char.ToLower(_RandomWord[i]))
                         {
-                            GuessedWord[i] = RandomWord[i];
+                            _GuessedWord[i] = _RandomWord[i];
                             correctGuess = true;
                         }
                     }
@@ -71,17 +71,17 @@
                     Console.WriteLine($"Wrong guess! The letter '{userGuess}' is not in the word.");
                 }
 
-                if (!GuessedWord.Contains('_'))
+                if (!_GuessedWord.Contains('_'))
                 {
                     Console.Clear();
-                    Console.WriteLine($"\nCongratulations! You guessed the word: {RandomWord}");
+                    Console.WriteLine($"\nCongratulations! You guessed the word: {_RandomWord}");
                     break;
                 }
 
                 if (Lives == 0)
                 {
                     Console.Clear();
-                    Console.WriteLine($"\nYou lost! The word was: {RandomWord}");
+                    Console.WriteLine($"\nYou lost! The word was: {_RandomWord}");
                     break;
                 }
             }
