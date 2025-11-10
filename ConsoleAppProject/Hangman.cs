@@ -10,6 +10,14 @@
                 "dragonfruit",
                 "elderberry"
             };
+        private readonly Dictionary<string, string> _Hints = new Dictionary<string, string>
+        {
+            { "apple", "A common fruit, often red or green." },
+            { "banana", "A long yellow fruit." },
+            { "cherry", "Small red fruit, often on desserts." },
+            { "dragonfruit", "Exotic fruit with pink skin."},
+            { "elderberry", "Small dark berry." }
+        };
 
         private readonly int _Index;
         private readonly string _RandomWord;
@@ -30,10 +38,19 @@
 
         public void Start()
         {
+            Console.Clear();
+            Console.WriteLine("\n=================================\n");
+            Console.WriteLine("       Welcome to Hangman        ");
+            Console.WriteLine("\n=================================\n");
+
             while (true)
             {
+                Console.WriteLine("---------------------------------");
                 Console.WriteLine("Word: " + string.Join(" ", _GuessedWord));
+                Console.WriteLine("Hint: " + _Hints[_RandomWord]);
                 Console.WriteLine($"Lives remaining: {Lives}");
+                Console.WriteLine("Tried letters: " + string.Join(", ", _TriedLetters));
+                Console.WriteLine("---------------------------------");
 
                 Console.Write("\nGuess a letter: ");
                 string input = Console.ReadLine() ?? string.Empty;
@@ -71,17 +88,28 @@
                     Console.WriteLine($"Wrong guess! The letter '{userGuess}' is not in the word.");
                 }
 
+                else
+                {
+                    Console.WriteLine($"Good job! '{userGuess}' is in the word!\n");
+                }
+
                 if (!_GuessedWord.Contains('_'))
                 {
                     Console.Clear();
-                    Console.WriteLine($"\nCongratulations! You guessed the word: {_RandomWord}");
+                    Console.WriteLine("\n=================================\n");
+                    Console.WriteLine("       Congratulations!          ");
+                    Console.WriteLine("\n=================================\n");
+                    Console.WriteLine($"\nYou guessed the word: {_RandomWord}\n");
                     break;
                 }
 
                 if (Lives == 0)
                 {
                     Console.Clear();
-                    Console.WriteLine($"\nYou lost! The word was: {_RandomWord}");
+                    Console.WriteLine("\n=================================\n");
+                    Console.WriteLine("             Game Over           ");
+                    Console.WriteLine("\n=================================\n");
+                    Console.WriteLine($"\nThe word was: {_RandomWord}\n");
                     break;
                 }
             }
