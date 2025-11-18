@@ -1,4 +1,6 @@
-﻿namespace ConsoleAppProject
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace ConsoleAppProject
 {
     internal class Hangman
     {
@@ -100,6 +102,12 @@
                     Console.WriteLine("       Congratulations!          ");
                     Console.WriteLine("\n=================================\n");
                     Console.WriteLine($"\nYou guessed the word: {_RandomWord}\n");
+
+                    Console.WriteLine("Enter your name: ");
+                    string username = Console.ReadLine() ?? string.Empty;
+
+                    SaveData(username, Lives);
+                    Console.WriteLine("Score saved successfully!");
                     break;
                 }
 
@@ -113,6 +121,21 @@
                     break;
                 }
             }
+        }
+        public void SaveData(string username, uint lives)
+        {
+            string projectDir = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName ?? string.Empty;
+            string folderDir = Path.Combine(projectDir, "Data");
+
+            if (!Directory.Exists(folderDir))
+            {
+                Directory.CreateDirectory(folderDir);
+            }
+
+            string filePath = Path.Combine(folderDir, "Hangman.txt");
+
+            using StreamWriter streamWriter = new StreamWriter(filePath);
+            streamWriter.WriteLine($"\nUsername: {username} \nLives: {lives}");
         }
     }
 }
